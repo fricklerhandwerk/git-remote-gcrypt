@@ -225,6 +225,7 @@ gitception_new_repo()
 # Fetch repo $1, file $2, tmpfile in $3
 GET()
 {
+  echo GET $1
 	if isurl sftp "$1"
 	then
 		(exec 0>&-; curl -s -S -k "$1/$2") > "$3"
@@ -236,8 +237,10 @@ GET()
 		(exec 0>&-; rclone copyto "${1#rclone://}"/"$2" "$3" >&2)
 	elif islocalrepo "$1"
 	then
+    echo ...local repo found
 		cat "$1/$2" > "$3"
 	else
+    echo now going for gitception
 		gitception_get "${1#gitception://}" "$2" > "$3"
 	fi
 }
@@ -539,7 +542,7 @@ ensure_connected()
 			return 1
 		else
 			cat >&2 "$tmp_stderr"
-			echo_info "Repository not found: $URL"
+			echo_info "well fuck... Repository not found: $URL"
 			return 1
 		fi
 	}
