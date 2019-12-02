@@ -157,7 +157,7 @@ gitception_get()
 	# Take care to preserve FETCH_HEAD
 	local ret_=: obj_id= fet_head="$GIT_DIR/FETCH_HEAD"
 	[ -e "$fet_head" ] && command mv -f "$fet_head" "$fet_head.$$~" || :
-	git fetch -q -f "$1" "$Gref_rbranch:$Gref" >/dev/null &&
+	git fetch -f "$1" "$Gref_rbranch:$Gref" &&
 		obj_id="$(git ls-tree "$Gref" | xgrep -E '\b'"$2"'$' | awk '{print $3}')" &&
 		isnonnull "$obj_id" && git cat-file blob "$obj_id" && ret_=: ||
 		{ ret_=false && : ; }
